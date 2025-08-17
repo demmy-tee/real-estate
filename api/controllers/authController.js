@@ -1,6 +1,6 @@
 import User from '../userModel/user.model.js';
 import bcrypt from 'bcryptjs';
-export const signup = async (req, res) => {
+export const signup = async (req, res,next) => {
   const { username, email, password } = req.body;
   console.log(username, email, password);
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -15,8 +15,7 @@ export const signup = async (req, res) => {
       receivedData: { username, email, password: password ? '***' : 'not provided' }
     });
   } catch (error) {
-    console.error( error);
-    res.status(500).json({ message: error.message });
+   next(error); // Pass the error to the error handling middleware
   }
 }
 
